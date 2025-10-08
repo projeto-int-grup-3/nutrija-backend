@@ -1,8 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
-import { CategoriaService } from '../service/categoria.service';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { Categoria } from '../entities/categoria.entity';
+import { CategoriaService } from '../service/categoria.service';
 
 @Controller('categorias')
+@ApiTags('Categoria')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class CategoriaController {
   constructor(private readonly categoriaService: CategoriaService) {}
 

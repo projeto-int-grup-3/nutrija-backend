@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-import { Produto } from '../produto.entity';
+import { ILike, Repository } from 'typeorm';
 import { DeleteResult } from 'typeorm/browser';
+import { Produto } from '../entities/produto.entity';
 
 @Injectable()
 export class ProdutoService {
@@ -23,7 +23,7 @@ export class ProdutoService {
     });
 
     if (!produto) {
-      throw new HttpException('produto não encontrada', HttpStatus.NOT_FOUND);
+      throw new HttpException('produto não encontrado', HttpStatus.NOT_FOUND);
     }
 
     return produto;
