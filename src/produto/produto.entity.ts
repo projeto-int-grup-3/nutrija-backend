@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumber, Min } from 'class-validator';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Categoria } from '../../categoria/entities/categoria.entity';
+import { Usuario } from '../usuario/entities/usuario.entity';
 
 @Entity({ name: 'tb_produtos' })
 export class Produto {
@@ -26,7 +27,12 @@ export class Produto {
   quantidade: number;
 
   @ManyToOne(() => Categoria, (categoria) => categoria.produto, {
-    onDelete: 'SET NULL',
+    onDelete: 'RESTRICT',
   })
   categoria: Categoria;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.produto, {
+    onDelete: 'SET NULL',
+  })
+  usuario?: Usuario;
 }
