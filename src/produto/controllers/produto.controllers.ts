@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { Produto } from '../entities/produto.entity';
 import { ProdutoService } from '../service/produto.service';
-import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
-@Controller('/Produtos')
+@Controller('/produtos')
 @UseGuards(JwtAuthGuard)
 @ApiTags('Produto')
 @ApiBearerAuth()
@@ -23,9 +23,15 @@ export class ProdutoController {
     return this.produtoSevice.findById(id);
   }
 
-  @Get('/nome')
+  @Get('/similar/:id')
   @HttpCode(HttpStatus.OK)
-  findByAllNome(@Query('nome') nome: string): Promise<Produto[]> {
+  findProdutoSimilar(@Param('id', ParseIntPipe) id: number): Promise<Produto[]> {
+    return this.produtoSevice.findProdutoSimilar(id);
+  }
+
+  @Get('/nome/:nome')
+  @HttpCode(HttpStatus.OK)
+  findByAllNome(@Param('nome') nome: string): Promise<Produto[]> {
     return this.produtoSevice.findAllByNome(nome);
   }
 
