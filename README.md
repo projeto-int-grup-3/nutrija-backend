@@ -246,21 +246,6 @@ Content-Type: application/json
 - **Validação**: Class-validator para validação de dados
 - **CORS**: Habilitado para permitir requisições cross-origin
 
-## Testes
-
-```bash
-# Testes unitários
-npm run test
-
-# Testes E2E
-npm run test:e2e
-
-# Cobertura de testes
-npm run test:cov
-
-# Testes em modo watch
-npm run test:watch
-```
 
 ## Formatação e Lint
 
