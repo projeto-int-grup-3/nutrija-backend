@@ -1,98 +1,348 @@
+# 🥗 NutriJá Backend
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src=src\imagens\nutrijá.png width="500" alt="NutriJá Logo" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  Sua plataforma de delivery saudável preferida! Backend construído com NestJS para gerenciar produtos, categorias e usuários de forma eficiente e segura.
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Sobre o Projeto
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+O **NutriJá** é uma API RESTful desenvolvida com NestJS que oferece uma solução completa para gerenciamento de produtos saudáveis, categorias e autenticação de usuários. O projeto utiliza TypeORM para persistência de dados e implementa autenticação JWT para segurança.
 
-## Project setup
+## Tecnologias Utilizadas
 
-```bash
-$ npm install
+- **[NestJS](https://nestjs.com/)** - Framework Node.js progressivo
+- **[TypeScript](https://www.typescriptlang.org/)** - Superset JavaScript tipado
+- **[TypeORM](https://typeorm.io/)** - ORM para TypeScript e JavaScript
+- **[MySQL](https://www.mysql.com/)** - Banco de dados relacional (desenvolvimento)
+- **[PostgreSQL](https://www.postgresql.org/)** - Banco de dados relacional (produção)
+- **[Passport](http://www.passportjs.org/)** - Autenticação
+- **[JWT](https://jwt.io/)** - JSON Web Tokens
+- **[Bcrypt](https://www.npmjs.com/package/bcrypt)** - Hash de senhas
+- **[Swagger](https://swagger.io/)** - Documentação da API
+- **[Jest](https://jestjs.io/)** - Framework de testes
+
+## Diagrama Entidade-Relacionamento (DER)
+
+<p align="center">
+  <img src=src\imagens\DER.png width="500" alt="NutriJá Logo" />
+</p>
+
+### Relacionamentos
+
+- **Usuario → Produto**: Um usuário pode criar vários produtos (1:N)
+- **Categoria → Produto**: Uma categoria pode ter vários produtos (1:N)
+- **Produto → Categoria**: Um produto pertence a uma categoria (N:1) - DELETE RESTRICT
+- **Produto → Usuario**: Um produto pode ser criado por um usuário (N:1) - DELETE SET NULL
+
+## Estrutura do Projeto
+
+```
+nutrija-backend/
+├── src/
+│   ├── auth/                 # Módulo de autenticação
+│   │   ├── bcrypt/           # Serviço de criptografia
+│   │   ├── constants/        # Constantes JWT
+│   │   ├── controllers/      # Controller de autenticação
+│   │   ├── entities/         # DTO de login
+│   │   ├── guard/            # Guards JWT e Local
+│   │   ├── services/         # Serviço de autenticação
+│   │   └── strategy/         # Estratégias Passport
+│   ├── categoria/            # Módulo de categorias
+│   │   ├── controllers/      # Controller de categorias
+│   │   ├── entities/         # Entidade Categoria
+│   │   └── service/          # Serviço de categorias
+│   ├── produto/              # Módulo de produtos
+│   │   ├── controllers/      # Controller de produtos
+│   │   ├── entities/         # Entidade Produto
+│   │   └── service/          # Serviço de produtos
+│   ├── usuario/              # Módulo de usuários
+│   │   ├── controllers/      # Controller de usuários
+│   │   ├── entities/         # Entidade Usuario
+│   │   └── services/         # Serviço de usuários
+│   ├── data/                 # Configurações de banco de dados
+│   │   └── services/         # Dev e Prod services
+│   ├── app.controller.ts     # Controller principal
+│   ├── app.module.ts         # Módulo principal
+│   ├── app.service.ts        # Serviço principal
+│   └── main.ts               # Arquivo de inicialização
+├── test/                     # Testes E2E
+├── .env                      # Variáveis de ambiente
+├── package.json              # Dependências do projeto
+└── tsconfig.json             # Configuração TypeScript
 ```
 
-## Compile and run the project
+## Configuração e Instalação
 
+### Pré-requisitos
+
+- Node.js (v18 ou superior)
+- MySQL (desenvolvimento) ou PostgreSQL (produção)
+- NPM ou Yarn
+
+### Instalação
+
+1. Clone o repositório:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/projeto-int-grup-3/nutrija-backend.git
+cd nutrija-backend
 ```
 
-## Run tests
-
+2. Instale as dependências:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+3. Configure as variáveis de ambiente:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Crie um arquivo `.env` na raiz do projeto:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+```env
+# Porta da aplicação
+PORT=4000
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Banco de dados (Produção - PostgreSQL)
+DATABASE_URL=postgresql://user:password@host:5432/db_nutrija
+
+# Timezone
+TZ=-03:00
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+4. Configure o banco de dados:
 
-## Resources
+**Para desenvolvimento (MySQL):**
+- Edite o arquivo `src/data/services/dev.service.ts` com suas credenciais
+- O banco de dados `db_nutrija` será criado automaticamente
 
-Check out a few resources that may come in handy when working with NestJS:
+**Para produção (PostgreSQL):**
+- Configure a variável `DATABASE_URL` no `.env`
+- O arquivo `src/data/services/pro.service.ts` será usado
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Executando a Aplicação
 
-## Support
+```bash
+# Desenvolvimento
+npm run start:dev
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Produção
+npm run start:prod
 
-## Stay in touch
+# Debug
+npm run start:debug
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+A aplicação estará disponível em `http://localhost:4000`
 
-## License
+A documentação Swagger estará em `http://localhost:4000/swagger`
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Documentação da API
+
+### Endpoints Principais
+
+#### Autenticação
+
+| Método | Endpoint | Descrição | Status HTTP | Autenticação |
+|--------|-----------|------------|--------------|---------------|
+| POST | `/usuarios/cadastrar` | Cadastrar novo usuário | 201 Created | Não |
+| POST | `/usuarios/logar` | Fazer login | 200 OK | Não |
+
+#### Usuários
+
+| Método | Endpoint | Descrição | Status HTTP | Autenticação |
+|--------|-----------|------------|--------------|---------------|
+| GET | `/usuarios/all` | Listar todos os usuários | 200 OK | Sim |
+| GET | `/usuarios/:id` | Buscar usuário por ID | 200 OK | Sim |
+| PUT | `/usuarios/atualizar` | Atualizar usuário | 200 OK | Sim |
+
+#### Categorias
+
+| Método | Endpoint | Descrição | Status HTTP | Autenticação |
+|--------|-----------|------------|--------------|---------------|
+| GET | `/categorias` | Listar todas as categorias | 200 OK | Sim |
+| GET | `/categorias/:id` | Buscar categoria por ID | 200 OK | Sim |
+| GET | `/categorias/nome/:nome` | Buscar categoria por nome | 200 OK | Sim |
+| POST | `/categorias` | Criar nova categoria | 201 Created | Sim |
+| PUT | `/categorias` | Atualizar categoria | 200 OK | Sim |
+| DELETE | `/categorias/:id` | Deletar categoria | 204 No Content | Sim |
+
+#### Produtos
+
+| Método | Endpoint | Descrição | Status HTTP | Autenticação |
+|--------|-----------|------------|--------------|---------------|
+| GET | `/produtos` | Listar todos os produtos | 200 OK | Sim |
+| GET | `/produtos/:id` | Buscar produto por ID | 200 OK | Sim |
+| GET | `/produtos/nome/:nome` | Buscar produtos por nome | 200 OK | Sim |
+| GET | `/produtos/similar/:id` | Buscar produtos similares | 200 OK | Sim |
+| POST | `/produtos` | Criar novo produto | 201 Created | Sim |
+| PUT | `/produtos` | Atualizar produto | 200 OK | Sim |
+| DELETE | `/produtos/:id` | Deletar produto | 204 No Content | Sim |
+
+### Exemplos de Requisição
+
+#### Cadastrar Usuário
+
+```json
+POST /usuarios/cadastrar
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "usuario": "joao@email.com",
+  "senha": "senha123",
+  "foto": "https://exemplo.com/foto.jpg"
+}
+```
+
+#### Login
+
+```json
+POST /usuarios/logar
+Content-Type: application/json
+
+{
+  "usuario": "joao@email.com",
+  "senha": "senha123"
+}
+```
+
+**Resposta:**
+```json
+{
+  "id": 1,
+  "nome": "João Silva",
+  "usuario": "joao@email.com",
+  "senha": "",
+  "foto": "https://exemplo.com/foto.jpg",
+  "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+#### Criar Produto
+
+```json
+POST /produtos
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "nome": "Salada Caesar",
+  "descricao": "Salada fresca com alface, croutons e molho caesar",
+  "preco": 25.90,
+  "quantidade": 10,
+  "categoria": {
+    "id": 1
+  }
+}
+```
+
+## Segurança
+
+- **Autenticação JWT**: Tokens com expiração de 1 hora
+- **Bcrypt**: Hash de senhas com 10 rounds de salt
+- **Guards**: Proteção de rotas com JWT Authentication Guard
+- **Validação**: Class-validator para validação de dados
+- **CORS**: Habilitado para permitir requisições cross-origin
+
+## Testes
+
+```bash
+# Testes unitários
+npm run test
+
+# Testes E2E
+npm run test:e2e
+
+# Cobertura de testes
+npm run test:cov
+
+# Testes em modo watch
+npm run test:watch
+```
+
+## Formatação e Lint
+
+```bash
+# Formatar código
+npm run format
+
+# Executar lint
+npm run lint
+```
+
+## Build
+
+```bash
+# Build para produção
+npm run build
+```
+
+## Deploy
+
+O projeto está configurado para deploy em plataformas cloud. As principais configurações incluem:
+
+- **PostgreSQL** como banco de dados de produção
+- **SSL** habilitado para conexões seguras
+- **Variáveis de ambiente** para configurações sensíveis
+- **Sincronização automática** do schema do banco de dados
+
+### Deploy no Render/Heroku
+
+1. Configure a variável de ambiente `DATABASE_URL`
+2. Configure a variável `PORT` (opcional, padrão: 4000)
+3. O comando de start será executado automaticamente
+
+## Funcionalidades Principais
+
+### Sistema de Autenticação
+- Cadastro de usuários com validação de email único
+- Login com geração de token JWT
+- Proteção de rotas com Guards
+- Hash de senhas com Bcrypt
+
+### Gerenciamento de Produtos
+- CRUD completo de produtos
+- Busca por nome (case-insensitive)
+- Sistema de produtos similares por categoria e preço
+- Validação de estoque
+- Relacionamento com categorias e usuários
+
+### Sistema de Categorias
+- CRUD completo de categorias
+- Busca por nome
+- Restrição de deleção (RESTRICT) quando há produtos associados
+
+### Recursos Adicionais
+- Documentação automática com Swagger
+- Validação de dados com class-validator
+- Relacionamentos TypeORM otimizados
+- Tratamento de erros padronizado
+
+## Equipe
+
+Projeto desenvolvido pelo **Grupo 3** — *Projeto Integrador*  
+
+<p align="center">
+  <strong>Membros</strong><br><br>
+  Eduardo Alves<br>
+  Edvaldo Verissimo<br>
+  Fernanda Brito<br>
+  Jefferson Carvalho<br>
+  Joe Chriszel<br>
+  Mariana Santana<br>
+  Mayara Oliveira
+</p>
+
+
+## Links Úteis
+
+- [Documentação NestJS](https://docs.nestjs.com)
+- [TypeORM Documentation](https://typeorm.io)
+- [Swagger UI](http://localhost:4000/swagger) (após iniciar o projeto)
+- [Repositório GitHub](https://github.com/projeto-int-grup-3/nutrija-backend)
+
+---
+
+<p align="center">Feito com ❤️ pelo Grupo 3</p>
