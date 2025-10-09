@@ -5,15 +5,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CategoriaModule } from './categoria/categoria.module';
-import { DevService } from './data/services/dev.service';
-import { UsuarioModule } from './usuario/usuario.module';
+import { ProdService } from './data/services/pro.service';
 import { ProdutoModule } from './produto/produto.module';
+import { UsuarioModule } from './usuario/usuario.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
-      useClass: DevService,
+      useClass: ProdService,
       imports: [ConfigModule],
     }),
     UsuarioModule,
